@@ -1,12 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import "../App.css";
+import { login } from '../features/userSlice';
 
 const Login = (props) => {
     let data;
     let navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const [ user, setUser ] = useState({
         email : "", password : ""
     });
@@ -25,10 +29,8 @@ const Login = (props) => {
     }
 
     const goToUserConsole = () => {
-        // window.alert("Login Successful... redirecting to Home...");
-        // navigate('/user');
-        console.log(activeUser);
-
+        window.alert("Login Successful... redirecting to Home...");
+        navigate('/user');
     }
 
     const reloadPage = () => {
@@ -48,12 +50,11 @@ const Login = (props) => {
                 const { email, password, role } = users;
                 if ( email === user.email && password === user.password && role === 'admin' ){
                     count = 1;
-                    console.log(users);
+                    dispatch(login({...users}));
                     return count;
                 } else if ( email === user.email && password === user.password && role === 'normal' ) {
                     count = 2;
-                    setActiveUser(users);
-                    console.log(users);
+                    dispatch(login({...users}));
                     return count;
                 }
                 return count;
@@ -68,10 +69,10 @@ const Login = (props) => {
                 reloadPage();
             }
         };
-        useEffect(()=> {
-            console.log(activeUser);
-        }, [activeUser])
-        console.log(activeUser)
+    useEffect(()=> {
+        setActiveUser(user)
+    }, [activeUser])
+    // console.log(activeUser)
 
     return (
         <Container>

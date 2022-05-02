@@ -4,14 +4,17 @@ import { Grid, GridColumn } from '@progress/kendo-react-grid';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import Agreements from './Agreements';
 import "../App.css";
 // import { process } from '@progress/kendo-data-query';
 
+const initialDataState = {
+    skip: 0,
+    take: 10,
+}
+
 const Admin = () => {
-    const [user, setUser] = useState();
-    const [skip, setSkip] = useState(0);
-    const [take, setTake] = useState(10);
+    const [ user, setUser ] = useState();
+    const [ page, setPage ] = useState(initialDataState);
     // const [dataState, setDataState] = useState();
     // const [result, setResult] = useState(user);
     const navigate = useNavigate();
@@ -35,11 +38,9 @@ const Admin = () => {
         navigate("/creatagreement");
     }
 
-    const onPageChange = (event) => {
-        setSkip(event.page.skip);
-        setTake(event.page.take);
+    const pageChange = (e) => {
+        setPage(e.page);
     }
-
     const rowRender = (trElement, props) => {
         const available = props.dataItem.id;
         const grey = {
@@ -79,22 +80,19 @@ const Admin = () => {
                 {
                     user ? 
                     <Grid 
-                        data = { user.slice(skip, skip + take) }
+                        data = { user.slice(page.skip, page.skip + page.take) }
                         pageable = { true }
-                        skip = { skip }
-                        take = { take }
-                        onPageChange = {onPageChange}
+                        skip = { page.skip }
+                        take = { page.take }
                         total = { user.length }
+                        onPageChange = {pageChange}
                         rowRender={ rowRender }
-                        // scrollable={ 'scrollable' }
-                        // onScroll={ scrollHandler }
-                        // fixedScroll={ true }
                         resizable
                         reorderable
                         // filterable = { true }
                         // onDataStateChange = { onDataStateChange }
                         // {...dataState}
-                        style={{border: "1px solid black", boxShadow: "5px 5px 15px grey", minWidth: "1200px"}}
+                        style={{border: "1px solid black", boxShadow: "5px 5px 15px grey", minWidth: "1200px", height: "65vh"}}
                     >
                         
                         <GridColumn field="id" title="USER ID"/>

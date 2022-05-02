@@ -1,25 +1,57 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
+import { logout, selectUser } from '../features/userSlice';
 
 const Header = () => {
+    const user = useSelector(selectUser)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleClick =(e) => {
+        e.preventDefault();
+        dispatch(logout());
+        navigate("/");
+    }
+
+    const goToHome = (e) => {
+        e.preventDefault();
+        if(user){
+            if(user.role === 'admin'){
+                navigate("/admin")
+            }
+            else if (user.role === 'normal'){
+                navigate("/user")
+            }
+        } else {
+            navigate("/")
+        }
+    }
+
+    const goToAgreement = (e) => {
+        e.preventDefault();
+        navigate("/agreements")
+    }
+
     return (
         <Nav>
             <NavListWrap>
                 <NavList>
-                    <a href='/admin'>
+                    <a onClick={goToHome}>
                         <img src="/images/nav-home.svg" alt="" />
                         <span>Home</span>
                     </a>
                 </NavList>
 
                 <NavList>
-                    <a href='/agreements'>
+                    <a onClick={goToAgreement}>
                         <img src="/images/contract.svg" alt="" width={"24px"} />
                         <span>Agreement</span>
                     </a>
                 </NavList>
                 <NavList>
-                    <a href="/">
+                    <a onClick={handleClick}>
                         <img src="/images/logout.svg" alt="" width={"30px"} />
                         <span>Sign Out</span>
                     </a>
@@ -69,6 +101,7 @@ const NavList = styled.li`
     display: flex;
     align-items: center;
     a {
+        cursor:pointer;
         align-items: center;
         background: transparent;
         display: flex;

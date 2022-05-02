@@ -31,6 +31,10 @@ const CreateUser = () => {
         setIsSubmit(true);
     }
 
+    const goToLastPage = (e) => {
+        navigate("/admin");
+    }
+
     const postData = async (e) => {
         const { name, mobileNumber, email, orgCode, username, password } = user;
         mobileNumber.toString();
@@ -89,6 +93,9 @@ const CreateUser = () => {
             <div className='whole'>
                 <hr/>
                 <div className="inner_container">
+                <div className='backbutton'>
+                    <button className="fluid ui circular button blue" style={{width: "80px", margin: "5px", padding: "10px", fontSize: "1rem"}} onClick={goToLastPage}>BACK</button>
+                </div>
                     <h1>Create User</h1>
                     <form onSubmit = { handleSubmit }>
                         <div className="ui form">
